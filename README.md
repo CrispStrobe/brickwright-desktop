@@ -18,133 +18,132 @@ This version includes exclusive extensions not available in the standard TurboWa
 * **Utilities:** Gamepad support, advanced array manipulation, and CSP solvers.
 
 These extensions run **unsandboxed**, allowing direct communication with hardware via Bluetooth (BLE/Classic) and Serial/USB ports.
+Here is a professional, concise, and technically accurate `README.md` for your project.
 
 ---
 
-## 🛠️ Development & Building
+# Buildung
 
-**⚠️ Important:** This repository relies on a strict folder structure to function. You cannot build `turbowarp-desktop` in isolation; it requires the `extensions` and `scratch-gui` repositories to be present side-by-side.
+## Prerequisites
 
-### 1. Prerequisites
+* **Node.js**: v16+ (v20+ recommended)
+* **Operating System**: macOS (Required for .dmg generation)
+* **Git**: Required for repository cloning
 
-* **Node.js:** v18 or v20 LTS recommended.
-* **Git:** Installed and configured.
-* **Clean Environment:** Ensure you do not have a rogue `node_modules` folder in your root code directory (e.g. `~/code/node_modules`).
+## Project Structure
 
-### 2. Folder Structure
-
-You **must** organize your folders like this:
+Ensure your directory structure matches the following layout before proceeding:
 
 ```text
-/Your-Project-Root/
-├── extensions/             <-- Clone https://github.com/CrispStrobe/extensions here
-├── scratch-gui/            <-- Clone https://github.com/CrispStrobe/scratch-gui here
-└── turbowarp-desktop/      <-- This repository
+/code/turbowarp/
+├── extensions/          # Fork: CrispStrobe/extensions (branch: main)
+├── scratch-gui/         # Fork: CrispStrobe/scratch-gui (branch: develop)
+└── turbowarp-desktop/   # Fork: CrispStrobe/turbowarp-desktop
 
 ```
 
-### 3. Setup Instructions
+## Build Instructions (macOS)
 
-#### Step 1: Clone All Repositories
+### 1. Build the GUI Library
 
-```bash
-# 1. Create a root folder
-mkdir my-lego-scratch
-cd my-lego-scratch
-
-# 2. Clone Extensions (Folder MUST be named 'extensions')
-git clone https://github.com/CrispStrobe/extensions.git extensions
-
-# 3. Clone GUI (Folder MUST be named 'scratch-gui')
-git clone https://github.com/CrispStrobe/scratch-gui.git scratch-gui
-
-# 4. Clone Desktop (Folder MUST be named 'turbowarp-desktop')
-git clone https://github.com/CrispStrobe/turbowarp-desktop.git turbowarp-desktop
-
-```
-
-#### Step 2: Install & Build Dependencies
-
-You must set up the repositories in this specific order.
-
-**A. Setup Extensions**
-
-```bash
-cd extensions
-npm install
-npm link
-cd ..
-
-```
-
-**B. Setup GUI**
-This step builds the interface dist files required by the desktop app.
+The Desktop application requires a pre-compiled UMD library from `scratch-gui`.
 
 ```bash
 cd scratch-gui
-# Ensure build script uses valid URL (if needed)
+
+# Install dependencies
 npm install
-npm run build
-npm link
-cd ..
+
+# Build library (BUILD_MODE=dist forces UMD output)
+BUILD_MODE=dist npm run build
+
+# Correct build output path
+# Webpack outputs to dist/js/, but package.json expects dist/
+mv dist/js/* dist/
+rmdir dist/js
 
 ```
 
-**C. Setup Desktop**
-This connects everything. We use `file:` paths for stability.
+**Verification:** Ensure `dist/scratch-gui.js` exists.
+
+### 2. Configure and Install Desktop Dependencies
+
+Navigate to the desktop repository and perform a clean install.
 
 ```bash
-cd turbowarp-desktop
+cd ../turbowarp-desktop
 
-# 1. Clean any old installs
-rm -rf node_modules package-lock.json
+# Clean previous artifacts
+rm -rf node_modules package-lock.json dist dist-renderer-webpack
 
-# 2. Configure package.json to use local folders
-# Ensure "scratch-gui" and "@turbowarp/extensions" point to "file:../[folder]"
-
-# 3. Install dependencies
-npm install
-
-# 4. Force install React to prevent webpack conflicts
-npm install react react-dom react-redux redux --save-dev
+# Install dependencies ignoring scripts
+# This bypasses the upstream 'prepublish' script which fails due to broken URLs
+npm install --ignore-scripts
 
 ```
 
-### 4. Build the App
+### 3. Replace Dependencies (Manual Linking)
 
-**A. Fetch Resources**
-Downloads the compiler, packager, and builds your local extensions.
+Overwrite the standard installed packages with your local, custom-built versions.
 
 ```bash
+# Remove standard packages
+rm -rf node_modules/scratch-gui
+rm -rf node_modules/@turbowarp/extensions
+
+# Copy local builds
+cp -R ../scratch-gui node_modules/
+mkdir -p node_modules/@turbowarp
+cp -R ../extensions node_modules/@turbowarp/
+
+```
+
+### 4. Resolve Dependency Conflicts (Hoisting)
+
+Manually resolve React version conflicts and hoist critical libraries to the top-level `node_modules` to ensure Electron can locate them.
+
+```bash
+# Remove nested React/Redux to force usage of root versions (Fixes "store is null" crash)
+rm -rf node_modules/scratch-gui/node_modules/react
+rm -rf node_modules/scratch-gui/node_modules/react-dom
+rm -rf node_modules/scratch-gui/node_modules/redux
+rm -rf node_modules/scratch-gui/node_modules/react-redux
+
+# Hoist core engines (Fixes "media glob" and extension worker errors)
+mv node_modules/scratch-gui/node_modules/scratch-blocks node_modules/
+mv node_modules/scratch-gui/node_modules/scratch-vm node_modules/
+
+# Hoist TurboWarp utilities (Fixes l10n and SVG renderer errors)
+cp -Rn node_modules/scratch-gui/node_modules/@turbowarp/* node_modules/@turbowarp/
+
+# Hoist remaining loaders
+cp -Rn node_modules/scratch-gui/node_modules/* node_modules/
+
+```
+
+### 5. Compile and Package
+
+Run the final build steps.
+
+```bash
+# Download required assets (Skipped during npm install)
 npm run fetch
 
-```
-
-**B. Compile the Code**
-This builds the Electron renderer process.
-
-```bash
+# Compile application
 npm run webpack:prod
 
-```
-
-*(Windows Users: If you get a `cross-env` error, run `npx cross-env NODE_ENV=production npx webpack` instead)*
-
-**C. Package the Installer (.exe/.dmg)**
-This generates the final executable files in the `dist/` folder.
-
-```bash
-# Windows
-npx electron-builder --win
-
-# macOS
+# Package for macOS
 npx electron-builder --mac
 
-# Linux
-npx electron-builder --linux
-
 ```
 
+The installer will be located at `dist/TurboWarp-Setup-[version].dmg`.
+
+## Troubleshooting
+
+* **`ECONNRESET` during install:** Ensure you use `--ignore-scripts` in Step 2.
+* **White Screen on Launch:** Ensure nested React dependencies were removed in Step 4.
+* **Missing Extensions:** Ensure `scratch-vm` was correctly hoisted in Step 4.
 ---
 
 ## 🚀 Releasing Updates
