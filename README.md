@@ -1,74 +1,72 @@
 
-# Custom TurboWarp Desktop (LEGO Edition)
+# TurboWarp Desktop (Scratch Mod) with Lego Bricks Extension
 
-**A specialized build of TurboWarp Desktop featuring advanced, unsandboxed extensions for LEGO hardware.**
+**A specialized build of TurboWarp Desktop featuring advanced, unsandboxed extensions for LEGO® hardware.**
 
-**[⬇️ Download Latest Release](https://www.google.com/search?q=https://github.com/CrispStrobe/turbowarp-desktop/releases)**
+This version includes custom extensions:
 
----
-
-## 🧱 Features
-
-This version includes exclusive extensions not available in the standard TurboWarp Desktop:
-
-* **LEGO EV3 (Mindstorms):** Direct control via Bluetooth/USB and NXC transpilation.
-* **LEGO NXT:** Full support for motors, sensors, and screen drawing.
-* **LEGO Spike Prime / Robot Inventor:** Advanced control via BLE.
-* **LEGO WeDo 2.0 & Boost:** Unified support.
+* **LEGO® EV3 (Mindstorms):** Direct control via Bluetooth/USB and NXC transpilation.
+* **LEGO® NXT:** Full support for motors, sensors, and screen drawing.
+* **LEGO® Spike Prime / Robot Inventor:** Advanced control via BLE.
+* **LEGO® WeDo 2.0 & Boost:** Unified support.
 * **Utilities:** Gamepad support, advanced array manipulation, and CSP solvers.
 
-These extensions run **unsandboxed**, allowing direct communication with hardware via Bluetooth (BLE/Classic) and Serial/USB ports.
-Here is a professional, concise, and technically accurate `README.md` for your project.
+**[⬇️ Download Latest Release](https://github.com/CrispStrobe/turbowarp-desktop/releases)**
 
 ---
 
-# Buildung
+## ⚠️ Disclaimer
 
-## Prerequisites
+**This is an unofficial, community-created modification.**
 
-* **Node.js**: v16+ (v20+ recommended)
-* **Operating System**: macOS (Required for .dmg generation)
-* **Git**: Required for repository cloning
+LEGO®, MINDSTORMS®, EV3, NXT, SPIKE™ Prime, and WeDo™ are trademarks of the LEGO Group. The LEGO Group does not sponsor, authorize, or endorse this software. This project is built upon [TurboWarp](https://turbowarp.org/) and [Scratch](https://scratch.mit.edu/), which are developed by their respective independent groups.
 
-## Project Structure
+---
 
-Ensure your directory structure matches the following layout before proceeding:
+## 📂 Project Structure (Critical)
+
+**⚠️ Important:** This project relies on a specific "side-by-side" folder structure. You cannot build this repo in isolation.
+
+You **must** organize your folders exactly like this:
 
 ```text
-/code/turbowarp/
-├── extensions/          # Fork: CrispStrobe/extensions (branch: main)
-├── scratch-gui/         # Fork: CrispStrobe/scratch-gui (branch: develop)
-└── turbowarp-desktop/   # Fork: CrispStrobe/turbowarp-desktop
+/Your-Project-Root/
+├── extensions/          # Clone: https://github.com/CrispStrobe/extensions (branch: main)
+├── scratch-gui/         # Clone: https://github.com/CrispStrobe/scratch-gui (branch: develop)
+└── turbowarp-desktop/   # Clone: https://github.com/CrispStrobe/turbowarp-desktop (This repo)
 
 ```
 
-## Build Instructions (macOS)
+---
+
+## 🛠️ Build Instructions: macOS
+
+> **Note:** The macOS build process is non-standard due to React version conflicts (v16 vs v19) and upstream URL issues. You must follow the **"Brain Transplant"** method below.
 
 ### 1. Build the GUI Library
 
-The Desktop application requires a pre-compiled UMD library from `scratch-gui`.
+The Desktop app requires a pre-built UMD library from `scratch-gui`.
 
 ```bash
-cd scratch-gui
+cd ../scratch-gui
 
 # Install dependencies
 npm install
 
-# Build library (BUILD_MODE=dist forces UMD output)
+# Build the library (BUILD_MODE=dist forces the correct UMD output)
 BUILD_MODE=dist npm run build
 
-# Correct build output path
-# Webpack outputs to dist/js/, but package.json expects dist/
+# Fix Output Path Bug: Webpack outputs to 'dist/js/', but Desktop expects 'dist/'
 mv dist/js/* dist/
 rmdir dist/js
 
 ```
 
-**Verification:** Ensure `dist/scratch-gui.js` exists.
+*Verify:* Ensure `dist/scratch-gui.js` exists before proceeding.
 
-### 2. Configure and Install Desktop Dependencies
+### 2. Prepare Desktop Dependencies
 
-Navigate to the desktop repository and perform a clean install.
+We perform a clean install while bypassing broken upstream scripts.
 
 ```bash
 cd ../turbowarp-desktop
@@ -76,22 +74,22 @@ cd ../turbowarp-desktop
 # Clean previous artifacts
 rm -rf node_modules package-lock.json dist dist-renderer-webpack
 
-# Install dependencies ignoring scripts
-# This bypasses the upstream 'prepublish' script which fails due to broken URLs
+# Install dependencies IGNORING scripts
+# (This prevents an 'ECONNRESET' error from a broken upstream prepublish script)
 npm install --ignore-scripts
 
 ```
 
-### 3. Replace Dependencies (Manual Linking)
+### 3. The "Brain Transplant" (Manual Linking)
 
-Overwrite the standard installed packages with your local, custom-built versions.
+We must manually overwrite the standard libraries with custom-built local versions.
 
 ```bash
-# Remove standard packages
+# Remove standard packages downloaded by npm
 rm -rf node_modules/scratch-gui
 rm -rf node_modules/@turbowarp/extensions
 
-# Copy local builds
+# Inject your local custom builds
 cp -R ../scratch-gui node_modules/
 mkdir -p node_modules/@turbowarp
 cp -R ../extensions node_modules/@turbowarp/
@@ -100,30 +98,31 @@ cp -R ../extensions node_modules/@turbowarp/
 
 ### 4. Resolve Dependency Conflicts (Hoisting)
 
-Manually resolve React version conflicts and hoist critical libraries to the top-level `node_modules` to ensure Electron can locate them.
+We must fix a React version conflict (v16 vs v19) and hoist critical libraries so Electron can find them.
 
 ```bash
-# Remove nested React/Redux to force usage of root versions (Fixes "store is null" crash)
+# 1. Remove nested React/Redux from GUI to force usage of Desktop's root versions
+# (This fixes the "store is null" and "render is not a function" crashes)
 rm -rf node_modules/scratch-gui/node_modules/react
 rm -rf node_modules/scratch-gui/node_modules/react-dom
 rm -rf node_modules/scratch-gui/node_modules/redux
 rm -rf node_modules/scratch-gui/node_modules/react-redux
 
-# Hoist core engines (Fixes "media glob" and extension worker errors)
+# 2. Hoist core engines up to root (Fixes "media glob" and extension worker errors)
+# We delete the root versions first to ensure a clean move
+rm -rf node_modules/scratch-blocks node_modules/scratch-vm
 mv node_modules/scratch-gui/node_modules/scratch-blocks node_modules/
 mv node_modules/scratch-gui/node_modules/scratch-vm node_modules/
 
-# Hoist TurboWarp utilities (Fixes l10n and SVG renderer errors)
+# 3. Hoist TurboWarp utilities (Fixes l10n and SVG renderer errors)
 cp -Rn node_modules/scratch-gui/node_modules/@turbowarp/* node_modules/@turbowarp/
 
-# Hoist remaining loaders
+# 4. Hoist remaining loaders
 cp -Rn node_modules/scratch-gui/node_modules/* node_modules/
 
 ```
 
 ### 5. Compile and Package
-
-Run the final build steps.
 
 ```bash
 # Download required assets (Skipped during npm install)
@@ -139,21 +138,46 @@ npx electron-builder --mac
 
 The installer will be located at `dist/TurboWarp-Setup-[version].dmg`.
 
-## Troubleshooting
-
-* **`ECONNRESET` during install:** Ensure you use `--ignore-scripts` in Step 2.
-* **White Screen on Launch:** Ensure nested React dependencies were removed in Step 4.
-* **Missing Extensions:** Ensure `scratch-vm` was correctly hoisted in Step 4.
 ---
 
-## 🚀 Releasing Updates
+## 🛠️ Build Instructions: Windows
 
-Since the final binaries (~150MB) are large, we use **GitHub Releases**:
+The Windows build process is simpler and uses standard `npm link`.
 
-1. Push your code changes to `master`.
-2. Go to the **[Releases Page](https://www.google.com/search?q=https://github.com/CrispStrobe/turbowarp-desktop/releases)**.
-3. Draft a new release (e.g., `v0.1.0`).
-4. Upload the `.exe` (Windows) or `.dmg` (macOS) files from your `dist/` folder.
+### 1. Setup Extensions
+
+```bash
+cd ../extensions
+npm install
+npm link
+
+```
+
+### 2. Setup Desktop
+
+```bash
+cd ../turbowarp-desktop
+npm install
+
+# Link the local extensions folder
+npm link scratch-gui
+# Note: Ensure 'scripts/prepare-extensions.mjs' is patched to look for ../extensions
+
+```
+
+### 3. Build
+
+```bash
+# Fetch resources
+npm run fetch
+
+# Compile Code (Use cross-env for Windows compatibility)
+npx cross-env NODE_ENV=production npx webpack
+
+# Package Installer
+npx electron-builder --win
+
+```
 
 ---
 
