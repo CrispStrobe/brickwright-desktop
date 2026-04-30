@@ -1,47 +1,70 @@
+# turbowarp-desktop (LEGO fork)
 
-# TurboWarp Desktop (Scratch Mod) with Lego Bricks Extension
+An Electron build of [TurboWarp Desktop](https://github.com/TurboWarp/desktop)
+that bundles custom **unsandboxed** LEGO hardware extensions:
 
-**A specialized build of TurboWarp Desktop featuring advanced, unsandboxed extensions for LEGO® hardware.**
+- **EV3 (Mindstorms):** direct control over Bluetooth/USB; transpile to NXC or
+  lmsasm and compile via [`legacy-lego-compiler`](https://github.com/CrispStrobe/legacy-lego-compiler).
+- **EV3 (ev3dev firmware):** stream commands or transpile to Python via the
+  on-device bridge (`ev3dev_ondevice.py`).
+- **NXT:** motors, sensors, screen drawing, NXC transpile.
+- **Spike Prime / Robot Inventor:** BLE (FW 3.x) and BTC (FW 2.x).
+- **WeDo 2.0, Boost, Powered UP, Technic Hub:** unified BLE.
+- **Utilities:** gamepad input, array/tensor blocks, CSP solver.
 
-This version includes custom extensions:
+**[Download latest release](https://github.com/CrispStrobe/turbowarp-desktop/releases)**
 
-* **LEGO® EV3 (Mindstorms):** Direct control via Bluetooth/USB and NXC transpilation.
-* **LEGO® NXT:** Full support for motors, sensors, and screen drawing.
-* **LEGO® Spike Prime / Robot Inventor:** Advanced control via BLE.
-* **LEGO® WeDo 2.0 & Boost:** Unified support.
-* **Utilities:** Gamepad support, advanced array manipulation, and CSP solvers.
+## What's different from upstream TurboWarp Desktop
 
-**[⬇️ Download Latest Release](https://github.com/CrispStrobe/turbowarp-desktop/releases)**
+This fork swaps the upstream extension gallery and the bundled `scratch-gui`
+build for local custom builds, then overrides Electron's security policy to
+allow `navigator.bluetooth` / `navigator.serial` from inside the LEGO
+extensions. Concretely:
 
----
+- `node_modules/scratch-gui` is replaced by [`CrispStrobe/scratch-gui`](https://github.com/CrispStrobe/scratch-gui) (`develop` branch, library mode).
+- `node_modules/@turbowarp/extensions` is replaced by [`CrispStrobe/extensions`](https://github.com/CrispStrobe/extensions) (`main`).
+- React/Redux are hoisted up to the Electron root to resolve a v16/v19 version conflict that breaks the renderer.
 
-## ⚠️ Disclaimer
+The build steps below codify the "brain transplant" needed to make those
+swaps work.
 
-**This is an unofficial, community-created modification.**
+## Disclaimer
 
-LEGO®, MINDSTORMS®, EV3, NXT, SPIKE™ Prime, and WeDo™ are trademarks of the LEGO Group. The LEGO Group does not sponsor, authorize, or endorse this software. This project is built upon [TurboWarp](https://turbowarp.org/) and [Scratch](https://scratch.mit.edu/), which are developed by their respective independent groups.
+Unofficial, community-created modification. LEGO®, MINDSTORMS®, EV3, NXT,
+SPIKE™ Prime, and WeDo™ are trademarks of the LEGO Group, which does not
+sponsor, authorize, or endorse this software. Built on
+[TurboWarp](https://turbowarp.org/) and [Scratch](https://scratch.mit.edu/).
 
----
+## Related repos
 
-## 📂 Project Structure (Critical)
+| Repo | Role |
+|------|------|
+| **`turbowarp-desktop` (this)** | Electron desktop build. |
+| [`CrispStrobe/scratch-gui`](https://github.com/CrispStrobe/scratch-gui) | The editor UI (built in library mode for desktop). |
+| [`CrispStrobe/extensions`](https://github.com/CrispStrobe/extensions) | Extension gallery consumed by the editor. |
+| [`CrispStrobe/turbowarp-lego`](https://github.com/CrispStrobe/turbowarp-lego) | Working sandbox + Python bridges. |
+| [`CrispStrobe/legacy-lego-compiler`](https://github.com/CrispStrobe/legacy-lego-compiler) | NXC / lmsasm REST API. |
+| [`CrispStrobe/turbowarp-android`](https://github.com/CrispStrobe/turbowarp-android) | Android wrapper variant. |
+| [`CrispStrobe/turbowarp-ios`](https://github.com/CrispStrobe/turbowarp-ios) | iOS wrapper variant. |
 
-**⚠️ Important:** This project relies on a specific "side-by-side" folder structure. You cannot build this repo in isolation.
+## Project structure (required)
 
-You **must** organize your folders exactly like this:
+This repo cannot be built in isolation — the build copies sources from sibling
+clones. Lay them out exactly like this:
 
 ```text
 /Your-Project-Root/
-├── extensions/          # Clone: https://github.com/CrispStrobe/extensions (branch: main)
-├── scratch-gui/         # Clone: https://github.com/CrispStrobe/scratch-gui (branch: develop)
-└── turbowarp-desktop/   # Clone: https://github.com/CrispStrobe/turbowarp-desktop (This repo)
-
+├── extensions/          # clone: https://github.com/CrispStrobe/extensions  (branch: main)
+├── scratch-gui/         # clone: https://github.com/CrispStrobe/scratch-gui (branch: develop)
+└── turbowarp-desktop/   # clone: https://github.com/CrispStrobe/turbowarp-desktop  (this repo)
 ```
 
 ---
 
-## 🛠️ Build Instructions: macOS
+## Build: macOS
 
-> **Note:** The macOS build process is non-standard due to React version conflicts (v16 vs v19) and upstream URL issues. You must follow the **"Brain Transplant"** method below.
+The macOS build is non-standard because of the v16/v19 React conflict and a
+broken upstream prepublish URL. Follow the steps below in order.
 
 ### 1. Build the GUI Library
 
@@ -140,9 +163,9 @@ The installer will be located at `dist/TurboWarp-Setup-[version].dmg`.
 
 ---
 
-## 🛠️ Build Instructions: Windows
+## Build: Windows
 
-The Windows build process is simpler and uses standard `npm link`.
+The Windows build is simpler and uses standard `npm link`.
 
 ### 1. Setup Extensions
 
@@ -181,8 +204,18 @@ npx electron-builder --win
 
 ---
 
-## 📜 License
+## Troubleshooting
 
-Based on [TurboWarp/desktop](https://github.com/TurboWarp/desktop) and [LLK/scratch-desktop](https://github.com/LLK/scratch-desktop).
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| `ECONNRESET` during `npm install` | Upstream prepublish hits a flaky URL | use `npm install --ignore-scripts` (the brain-transplant steps above already do this) |
+| `store is null` / `render is not a function` at startup | Duplicate React (v16 inside `scratch-gui`, v19 at root) | re-run step 4 — remove `node_modules/scratch-gui/node_modules/{react,react-dom,redux,react-redux}` |
+| `Cannot find module 'scratch-blocks'` | scratch-blocks not hoisted | re-run step 4 — `mv node_modules/scratch-gui/node_modules/scratch-blocks node_modules/` |
+| `media glob failed` / extension worker crashes | scratch-vm not hoisted | same as above for `scratch-vm` |
+| Bluetooth device picker doesn't appear | Permission policy not loosened in Electron | check `src/main.js` (web preferences) and `tw-security-manager.jsx` allowlist in `scratch-gui` |
 
-Licensed under the **GPLv3.0**. See `LICENSE` for more information.
+## License
+
+Based on [TurboWarp/desktop](https://github.com/TurboWarp/desktop) and
+[LLK/scratch-desktop](https://github.com/LLK/scratch-desktop). Licensed under
+**GPL-3.0**. See [`LICENSE`](LICENSE).
