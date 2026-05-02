@@ -1,6 +1,13 @@
-This document is the authoritative source for TurboWarp's changelogs. Everything else gets generated from this list by `node scripts/generate-changelogs.jsm`.
+This document is the authoritative source for TurboWarp's changelogs. Everything else gets generated from this list by `node scripts/generate-changelogs.mjs`.
 
 Prefix notes with "Windows:", "macOS:", or "Linux:" as needed. Do not use **formatting** or [links](https://desktop.turbowarp.org/).
+
+# 1.15.5 (2026-03-30)
+
+ - Added "online?" block, like the new Scratch block with the same name
+ - Fixed text to speech extension
+ - Fixed packager being unable to package projects with non-Scratch extensions without an internet connection
+ - Fixed text to speech extension and others in packager or when "Allow extensions to access any website" is enabled
 
 # 1.15.2 (2026-01-17)
 
