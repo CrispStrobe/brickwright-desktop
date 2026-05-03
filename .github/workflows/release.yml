@@ -179,14 +179,14 @@ jobs:
       run: |
         npm config set cache D:\npm-cache
         npm config set prefix D:\npm-prefix
-    - name: Clone CrispStrobe/extensions sibling (D: drive)
+    - name: Clone CrispStrobe/extensions sibling
       run: git clone --depth 1 https://github.com/CrispStrobe/extensions.git D:\extensions
-    - name: Install extensions deps (D: drive)
+    - name: Install extensions deps
       working-directory: D:\extensions
       run: npm ci --no-audit --no-fund
-    - name: Clone CrispStrobe/scratch-gui sibling (D: drive)
+    - name: Clone CrispStrobe/scratch-gui sibling
       run: git clone --depth 1 --branch develop https://github.com/CrispStrobe/scratch-gui.git D:\scratch-gui
-    - name: Install scratch-gui deps (D: drive)
+    - name: Install scratch-gui deps
       working-directory: D:\scratch-gui
       shell: bash
       run: |
@@ -196,7 +196,7 @@ jobs:
     - name: Install dependencies
       working-directory: D:\repo
       run: npm ci --loglevel=info
-    - name: Symlink scratch-blocks into desktop's node_modules (D: drive)
+    - name: Symlink scratch-blocks into desktop's node_modules
       working-directory: D:\repo
       shell: cmd
       run: mklink /J node_modules\scratch-blocks D:\scratch-gui\node_modules\scratch-blocks
