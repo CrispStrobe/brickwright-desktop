@@ -65,9 +65,9 @@ jobs:
           dist/*.AppImage
     - name: Upload artifacts to tag
       run: |
-        node scripts/upload-to-github-releases.mjs TurboWarp desktop "dist/*.deb"
-        node scripts/upload-to-github-releases.mjs TurboWarp desktop "dist/*.tar.gz"
-        node scripts/upload-to-github-releases.mjs TurboWarp desktop "dist/*.AppImage"
+        node scripts/upload-to-github-releases.mjs CrispStrobe turbowarp-desktop "dist/*.deb"
+        node scripts/upload-to-github-releases.mjs CrispStrobe turbowarp-desktop "dist/*.tar.gz"
+        node scripts/upload-to-github-releases.mjs CrispStrobe turbowarp-desktop "dist/*.AppImage"
       env:
         GH_TOKEN: "${{ github.token }}"
 
@@ -143,7 +143,7 @@ jobs:
         path: dist/*.dmg
     - name: Upload artifacts to tag
       run: |
-        node scripts/upload-to-github-releases.mjs TurboWarp desktop "dist/*.dmg"
+        node scripts/upload-to-github-releases.mjs CrispStrobe turbowarp-desktop "dist/*.dmg"
       env:
         GH_TOKEN: "${{ github.token }}"
 
@@ -255,6 +255,6 @@ jobs:
     - name: Upload signed artifacts to tag
       working-directory: D:\repo
       run: |
-        node scripts/upload-to-github-releases.mjs TurboWarp desktop "dist/*.exe"
+        node scripts/upload-to-github-releases.mjs CrispStrobe turbowarp-desktop "dist/*.exe"
       env:
         GH_TOKEN: "${{ github.token }}"
