@@ -24,6 +24,9 @@ jobs:
     # — both expect the gallery to live alongside this checkout.
     - name: Clone CrispStrobe/extensions sibling
       run: git clone --depth 1 https://github.com/CrispStrobe/extensions.git "$GITHUB_WORKSPACE/../extensions"
+    - name: Install extensions deps (so prepare-extensions's Builder resolves adm-zip etc.)
+      working-directory: ${{ github.workspace }}/../extensions
+      run: npm ci --no-audit --no-fund
     - name: Install dependencies
       run: npm ci
     - name: Prepare extensions
