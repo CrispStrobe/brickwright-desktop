@@ -2,9 +2,6 @@ name: Build (Manual)
 
 on:
   workflow_dispatch:
-  # Also fire when this workflow file itself changes — useful for validating
-  # CI changes and as a side-effect, forces GitHub to fully parse the workflow
-  # so workflow_dispatch becomes available via API/CLI in the first place.
   push:
     paths:
       - .github/workflows/build-manual.yml
