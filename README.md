@@ -21,7 +21,7 @@ build for local custom builds, then overrides Electron's security policy to
 allow `navigator.bluetooth` / `navigator.serial` from inside the LEGO
 extensions. Concretely:
 
-- `node_modules/scratch-gui` is replaced by [`CrispStrobe/scratch-gui`](https://github.com/CrispStrobe/scratch-gui) (`develop` branch, library mode).
+- `node_modules/scratch-gui` is replaced by [`CrispStrobe/brickwright`](https://github.com/CrispStrobe/brickwright) (`develop` branch, library mode).
 - `node_modules/@turbowarp/extensions` is replaced by [`CrispStrobe/extensions`](https://github.com/CrispStrobe/extensions) (`main`).
 - React/Redux are hoisted up to the Electron root to resolve a v16/v19 version conflict that breaks the renderer.
 
@@ -40,7 +40,7 @@ sponsor, authorize, or endorse this software. Built on
 | Repo | Role |
 |------|------|
 | **`turbowarp-desktop` (this)** | Electron desktop build. |
-| [`CrispStrobe/scratch-gui`](https://github.com/CrispStrobe/scratch-gui) | The editor UI (built in library mode for desktop). |
+| [`CrispStrobe/brickwright`](https://github.com/CrispStrobe/brickwright) | The editor UI (built in library mode for desktop). |
 | [`CrispStrobe/extensions`](https://github.com/CrispStrobe/extensions) | Extension gallery consumed by the editor. |
 | [`CrispStrobe/turbowarp-lego`](https://github.com/CrispStrobe/turbowarp-lego) | Working sandbox + Python bridges. |
 | [`CrispStrobe/legacy-lego-compiler`](https://github.com/CrispStrobe/legacy-lego-compiler) | NXC / lmsasm REST API. |
@@ -55,7 +55,7 @@ clones. Lay them out exactly like this:
 ```text
 /Your-Project-Root/
 ├── extensions/          # clone: https://github.com/CrispStrobe/extensions  (branch: main)
-├── scratch-gui/         # clone: https://github.com/CrispStrobe/scratch-gui (branch: develop)
+├── scratch-gui/         # clone: https://github.com/CrispStrobe/brickwright (branch: develop)
 └── turbowarp-desktop/   # clone: https://github.com/CrispStrobe/turbowarp-desktop  (this repo)
 ```
 
