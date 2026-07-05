@@ -29,8 +29,8 @@ jobs:
     - name: Install extensions deps (so prepare-extensions's Builder resolves adm-zip etc.)
       working-directory: ${{ github.workspace }}/../extensions
       run: npm ci --no-audit --no-fund
-    - name: Clone CrispStrobe/scratch-gui sibling
-      run: git clone --depth 1 --branch develop https://github.com/CrispStrobe/scratch-gui.git "$GITHUB_WORKSPACE/../scratch-gui"
+    - name: Clone CrispStrobe/brickwright sibling
+      run: git clone --depth 1 --branch develop https://github.com/CrispStrobe/brickwright.git "$GITHUB_WORKSPACE/../scratch-gui"
     - name: Install scratch-gui deps
       working-directory: ${{ github.workspace }}/../scratch-gui
       run: |
@@ -88,8 +88,8 @@ jobs:
     - name: Install extensions deps (so prepare-extensions's Builder resolves adm-zip etc.)
       working-directory: ${{ github.workspace }}/../extensions
       run: npm ci --no-audit --no-fund
-    - name: Clone CrispStrobe/scratch-gui sibling
-      run: git clone --depth 1 --branch develop https://github.com/CrispStrobe/scratch-gui.git "$GITHUB_WORKSPACE/../scratch-gui"
+    - name: Clone CrispStrobe/brickwright sibling
+      run: git clone --depth 1 --branch develop https://github.com/CrispStrobe/brickwright.git "$GITHUB_WORKSPACE/../scratch-gui"
     - name: Install scratch-gui deps
       working-directory: ${{ github.workspace }}/../scratch-gui
       run: |
@@ -184,8 +184,8 @@ jobs:
     - name: Install extensions deps
       working-directory: D:\extensions
       run: npm ci --no-audit --no-fund
-    - name: Clone CrispStrobe/scratch-gui sibling
-      run: git clone --depth 1 --branch develop https://github.com/CrispStrobe/scratch-gui.git D:\scratch-gui
+    - name: Clone CrispStrobe/brickwright sibling
+      run: git clone --depth 1 --branch develop https://github.com/CrispStrobe/brickwright.git D:\scratch-gui
     - name: Install scratch-gui deps
       working-directory: D:\scratch-gui
       shell: bash
