@@ -42,7 +42,7 @@ sponsor, authorize, or endorse this software. Built on
 | **`brickwright-desktop` (this)** | Electron desktop build. |
 | [`CrispStrobe/brickwright`](https://github.com/CrispStrobe/brickwright) | The editor UI (built in library mode for desktop). |
 | [`CrispStrobe/extensions`](https://github.com/CrispStrobe/extensions) | Extension gallery consumed by the editor. |
-| [`CrispStrobe/brickwright-lego`](https://github.com/CrispStrobe/brickwright-lego) | Working sandbox + Python bridges. |
+| [`CrispStrobe/brickwright-bridges`](https://github.com/CrispStrobe/brickwright-bridges) | Working sandbox + Python bridges. |
 | [`CrispStrobe/legacy-lego-compiler`](https://github.com/CrispStrobe/legacy-lego-compiler) | NXC / lmsasm REST API. |
 | [`CrispStrobe/brickwright-android`](https://github.com/CrispStrobe/brickwright-android) | Android wrapper variant. |
 | [`CrispStrobe/brickwright-ios`](https://github.com/CrispStrobe/brickwright-ios) | iOS wrapper variant. |
