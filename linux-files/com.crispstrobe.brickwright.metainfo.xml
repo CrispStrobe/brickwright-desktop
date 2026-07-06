@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2021-2025 Thomas Weber -->
 <component type="desktop-application">
-  <id>org.turbowarp.TurboWarp</id>
-  <launchable type="desktop-id">org.turbowarp.TurboWarp.desktop</launchable>
+  <id>com.crispstrobe.brickwright</id>
+  <launchable type="desktop-id">com.crispstrobe.brickwright.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0</project_license>
-  <name>TurboWarp</name>
+  <name>Brickwright</name>
   <developer id="org.turbowarp">
     <name>Thomas Weber</name>
   </developer>
@@ -38,10 +38,10 @@
       <image width="1153" height="734">https://raw.githubusercontent.com/TurboWarp/desktop-screenshots/bb4612ebefe99d816ae7e60f70f59e18d5fef3b9/flathub/pt-dark.png</image>
     </screenshot>
   </screenshots>
-  <url type="homepage">https://desktop.turbowarp.org/</url>
-  <url type="bugtracker">https://github.com/TurboWarp/desktop/issues</url>
+  <url type="homepage">https://github.com/CrispStrobe/brickwright-desktop</url>
+  <url type="bugtracker">https://github.com/CrispStrobe/brickwright-desktop/issues</url>
   <url type="translate">https://docs.turbowarp.org/translate</url>
-  <url type="vcs-browser">https://github.com/TurboWarp/desktop</url>
+  <url type="vcs-browser">https://github.com/CrispStrobe/brickwright-desktop</url>
   <categories>
     <category>Development</category>
   </categories>
