@@ -65,7 +65,7 @@
   "main": "./src-main/entrypoint.js",
   "build": {
     "appId": "org.turbowarp.desktop",
-    "productName": "TurboWarp",
+    "productName": "Brickwright",
     "files": [
       "node_modules/**/*",
       "src-main/**/*",
