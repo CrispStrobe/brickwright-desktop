@@ -1,4 +1,4 @@
-# turbowarp-desktop (LEGO fork)
+# brickwright-desktop (LEGO fork)
 
 An Electron build of [TurboWarp Desktop](https://github.com/TurboWarp/desktop)
 that bundles custom **unsandboxed** LEGO hardware extensions:
@@ -12,7 +12,7 @@ that bundles custom **unsandboxed** LEGO hardware extensions:
 - **WeDo 2.0, Boost, Powered UP, Technic Hub:** unified BLE.
 - **Utilities:** gamepad input, array/tensor blocks, CSP solver.
 
-**[Download latest release](https://github.com/CrispStrobe/turbowarp-desktop/releases)**
+**[Download latest release](https://github.com/CrispStrobe/brickwright-desktop/releases)**
 
 ## What's different from upstream TurboWarp Desktop
 
@@ -39,13 +39,13 @@ sponsor, authorize, or endorse this software. Built on
 
 | Repo | Role |
 |------|------|
-| **`turbowarp-desktop` (this)** | Electron desktop build. |
+| **`brickwright-desktop` (this)** | Electron desktop build. |
 | [`CrispStrobe/brickwright`](https://github.com/CrispStrobe/brickwright) | The editor UI (built in library mode for desktop). |
 | [`CrispStrobe/extensions`](https://github.com/CrispStrobe/extensions) | Extension gallery consumed by the editor. |
-| [`CrispStrobe/turbowarp-lego`](https://github.com/CrispStrobe/turbowarp-lego) | Working sandbox + Python bridges. |
+| [`CrispStrobe/brickwright-lego`](https://github.com/CrispStrobe/brickwright-lego) | Working sandbox + Python bridges. |
 | [`CrispStrobe/legacy-lego-compiler`](https://github.com/CrispStrobe/legacy-lego-compiler) | NXC / lmsasm REST API. |
-| [`CrispStrobe/turbowarp-android`](https://github.com/CrispStrobe/turbowarp-android) | Android wrapper variant. |
-| [`CrispStrobe/turbowarp-ios`](https://github.com/CrispStrobe/turbowarp-ios) | iOS wrapper variant. |
+| [`CrispStrobe/brickwright-android`](https://github.com/CrispStrobe/brickwright-android) | Android wrapper variant. |
+| [`CrispStrobe/brickwright-ios`](https://github.com/CrispStrobe/brickwright-ios) | iOS wrapper variant. |
 
 ## Project structure (required)
 
@@ -56,7 +56,7 @@ clones. Lay them out exactly like this:
 /Your-Project-Root/
 ├── extensions/          # clone: https://github.com/CrispStrobe/extensions  (branch: main)
 ├── scratch-gui/         # clone: https://github.com/CrispStrobe/brickwright (branch: develop)
-└── turbowarp-desktop/   # clone: https://github.com/CrispStrobe/turbowarp-desktop  (this repo)
+└── brickwright-desktop/   # clone: https://github.com/CrispStrobe/brickwright-desktop  (this repo)
 ```
 
 ---
@@ -92,7 +92,7 @@ rmdir dist/js
 We perform a clean install while bypassing broken upstream scripts.
 
 ```bash
-cd ../turbowarp-desktop
+cd ../brickwright-desktop
 
 # Clean previous artifacts
 rm -rf node_modules package-lock.json dist dist-renderer-webpack
@@ -179,7 +179,7 @@ npm link
 ### 2. Setup Desktop
 
 ```bash
-cd ../turbowarp-desktop
+cd ../brickwright-desktop
 npm install
 
 # Link the local extensions folder
