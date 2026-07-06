@@ -1,5 +1,5 @@
 {
-  "name": "turbowarp-desktop",
+  "name": "brickwright-desktop",
   "description": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
   "version": "1.15.5",
   "license": "GPL-3.0",
@@ -155,7 +155,7 @@
       "provisioningProfile": "build/development.provisionprofile"
     },
     "linux": {
-      "executableName": "turbowarp-desktop",
+      "executableName": "brickwright-desktop",
       "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
       "icon": "./build/",
       "synopsis": "Mod of Scratch with a compiler and more features.",
@@ -163,7 +163,7 @@
       "category": "Development",
       "desktop": {
         "entry": {
-          "StartupWMClass": "turbowarp-desktop",
+          "StartupWMClass": "brickwright-desktop",
           "Keywords": "scratch;"
         }
       },
