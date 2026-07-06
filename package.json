@@ -1,6 +1,6 @@
 {
   "name": "brickwright-desktop",
-  "description": "Scratch mod with a compiler, dark mode, a bunch of addons, and more.",
+  "description": "Brickwright — a creative-coding studio built on Scratch: blocks, code, and bricks.",
   "version": "1.15.5",
   "license": "GPL-3.0",
   "author": {
@@ -53,18 +53,18 @@
       "terser-webpack-plugin": "^4.2.3"
     }
   },
-  "homepage": "https://desktop.turbowarp.org/",
+  "homepage": "https://github.com/CrispStrobe/brickwright-desktop",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TurboWarp/desktop.git"
+    "url": "https://github.com/CrispStrobe/brickwright-desktop.git"
   },
   "bugs": {
-    "url": "https://github.com/TurboWarp/desktop/issues",
+    "url": "https://github.com/CrispStrobe/brickwright-desktop/issues",
     "email": "contact@turbowarp.org"
   },
   "main": "./src-main/entrypoint.js",
   "build": {
-    "appId": "org.turbowarp.desktop",
+    "appId": "com.crispstrobe.brickwright",
     "productName": "Brickwright",
     "files": [
       "node_modules/**/*",
@@ -158,8 +158,8 @@
       "executableName": "brickwright-desktop",
       "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
       "icon": "./build/",
-      "synopsis": "Mod of Scratch with a compiler and more features.",
-      "description": "TurboWarp is a Scratch mod with a compiler to run projects faster, dark mode for your eyes, a bunch of addons to improve the editor, and more.",
+      "synopsis": "Creative-coding studio: blocks, code, and bricks.",
+      "description": "Brickwright is a creative-coding studio built on Scratch — write projects as blocks or code, and drive real bricks and robots.",
       "category": "Development",
       "desktop": {
         "entry": {

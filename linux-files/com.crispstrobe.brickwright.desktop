@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Brickwright
+# Change the path to match where you install the app.
+Exec=/opt/Brickwright/brickwright-desktop %U
+Terminal=false
+Type=Application
+Icon=com.crispstrobe.brickwright
+StartupWMClass=brickwright-desktop
+Comment=Brickwright is a creative-coding studio built on Scratch — blocks, code, and bricks.
+MimeType=application/x.scratch.sb3;application/x.scratch.sb2;application/x.scratch.sb;
+Categories=Development;
+Keywords=scratch;brickwright;
